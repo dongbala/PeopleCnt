@@ -32,116 +32,85 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         
-<h2>Here are some instructions I found on the Internet. Have fun! ;-)</h2>
+        <h2>Here are some instructions I found on the Internet. Have fun! ;-)</h2>
+        
+        <div class="entry-content">
+        <div id="toc"><p id="toctitle">目录</p><ul id="ul_1"><li><a href="#toc-1">1.注册账户以及创建仓库</a></li><li><a href="#toc-2">2.安装客户端msysgit</a></li><li><a href="#toc-3">3.配置Git</a></li><li><a href="#toc-4">4.提交、上传</a></li><li><a href="#toc-5">5.gitignore文件</a></li><li><a href="#toc-6">6.tag</a></li><li><a href="#toc-7">6.1查看tag</a></li><li><a href="#toc-8">6.2创建tag</a></li><li><a href="#toc-9">6.3删除tag</a></li><li><a href="#toc-10">6.4验证tag</a></li><li><a href="#toc-11">6.5共享tag</a></li></ul></div><p>github是一个基于git的代码托管平台，付费用户可以建私人仓库，我们一般的免费用户只能使用公共仓库，也就是代码要公开。对于一般人来说公共仓库就已经足够了，而且我们也没多少代码来管理，O(∩_∩)O~。下面是我总结的一些简单使用方法，供初学者参考。
+        </p><h2><a name="toc-1"></a>1.注册账户以及创建仓库</h2>
+        要想使用github第一步当然是注册github账号了。之后就可以创建仓库了（免费用户只能建公共仓库），Create a New Repository，填好名称后Create，之后会出现一些仓库的配置信息，这也是一个git的简单教程。
+        <h2><a name="toc-2"></a>2.安装客户端msysgit</h2>
+        github是服务端，要想在自己电脑上使用git我们还需要一个git客户端，我这里选用msysgit，这个只是提供了git的核心功能，而且是基于命令行的。如果想要图形界面的话只要在msysgit的基础上安装TortoiseGit即可。<p></p>
+        <p>装完msysgit后右键鼠标会多出一些选项来，在本地仓库里右键选择Git Init Here，会多出来一个.git文件夹，这就表示本地git创建成功。右键Git Bash进入git命令行，为了把本地的仓库传到github，还需要配置ssh key。
+        </p><h2><a name="toc-3"></a>3.配置Git</h2>
+        首先在本地创建ssh key；<p></p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ ssh</span><span class="pun">-</span><span class="pln">keygen </span><span class="pun">-</span><span class="pln">t rsa </span><span class="pun">-</span><span class="pln">C </span><span class="str">"your_email@youremail.com"</span></code></li></ol></pre>
+        
+        <p>后面的your_email@youremail.com改为你的邮箱，之后会要求确认路径和输入密码，我们这使用默认的一路回车就行。成功的话会在~/下生成.ssh文件夹，进去，打开id_rsa.pub，复制里面的key。</p>
+        <p>回到github，进入Account Settings，左边选择SSH Keys，Add SSH Key,title随便填，粘贴key。为了验证是否成功，在git bash下输入：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ ssh </span><span class="pun">-</span><span class="pln">T git@github</span><span class="pun">.</span><span class="pln">com</span></code></li></ol></pre>
+        
+        <p>如果是第一次的会提示是否continue，输入yes就会看到：You've successfully authenticated, but GitHub does not provide shell access 。这就表示已成功连上github。</p>
+        <p>接下来我们要做的就是把本地仓库传到github上去，在此之前还需要设置username和email，因为github每次commit都会记录他们。</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git config </span><span class="pun">--</span><span class="kwd">global</span><span class="pln"> user</span><span class="pun">.</span><span class="pln">name </span><span class="str">"your name"</span></code></li><li class="L1"><code><span class="pln">$ git config </span><span class="pun">--</span><span class="kwd">global</span><span class="pln"> user</span><span class="pun">.</span><span class="pln">email </span><span class="str">"your_email@youremail.com"</span></code></li></ol></pre>
+        
+        <p>进入要上传的仓库，右键git bash，添加远程地址：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git remote add origin git@github</span><span class="pun">.</span><span class="pln">com</span><span class="pun">:</span><span class="pln">yourName</span><span class="pun">/</span><span class="pln">yourRepo</span><span class="pun">.</span><span class="pln">git</span></code></li></ol></pre>
+        
+        <p>后面的yourName和yourRepo表示你再github的用户名和刚才新建的仓库，加完之后进入.git，打开config，这里会多出一个remote “origin”内容，这就是刚才添加的远程地址，也可以直接修改config来配置远程地址。
+        </p><h2><a name="toc-4"></a>4.提交、上传</h2>
+        接下来在本地仓库里添加一些文件，比如README，<p></p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git add README</span></code></li><li class="L1"><code><span class="pln">$ git commit </span><span class="pun">-</span><span class="pln">m </span><span class="str">"first commit"</span></code></li></ol></pre>
+        
+        <p>上传到github：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git push origin master</span></code></li></ol></pre>
+        
+        <p>git push命令会将本地仓库推送到远程服务器。<br>
+        git pull命令则相反。</p>
+        <p>修改完代码后，使用git status可以查看文件的差别，使用git add 添加要commit的文件，也可以用git add -i来智能添加文件。之后git commit提交本次修改，git push上传到github。
+        </p><h2><a name="toc-5"></a>5.gitignore文件</h2>
+        .gitignore顾名思义就是告诉git需要忽略的文件，这是一个很重要并且很实用的文件。一般我们写完代码后会执行编译、调试等操作，这期间会产生很多中间文件和可执行文件，这些都不是代码文件，是不需要git来管理的。我们在git status的时候会看到很多这样的文件，如果用git add -A来添加的话会把他们都加进去，而手动一个个添加的话也太麻烦了。这时我们就需要.gitignore了。比如一般c#的项目我的.gitignore是这样写的：<p></p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">bin</span></code></li><li class="L1"><code><span class="pun">*.</span><span class="pln">suo</span></code></li><li class="L2"><code><span class="pln">obj</span></code></li></ol></pre>
+        
+        <p>bin和obj是编译目录，里面都不是源代码，忽略；suo文件是vs2010的配置文件，不需要。这样你在git status的时候就只会看到源代码文件了，就可以放心的git add -A了。
+        </p><h2><a name="toc-6"></a>6.tag</h2>
+        我们可以创建一个tag来指向软件开发中的一个关键时期，比如版本号更新的时候可以建一个“v2.0”、“v3.1”之类的标签，这样在以后回顾的时候会比较方便。tag的使用很简单，主要操作有：查看tag、创建tag、验证tag以及共享tag。
+        <h3><a name="toc-7"></a>6.1查看tag</h3>
+        列出所有tag：<p></p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag</span></code></li></ol></pre>
+        
+        <p>这样列出的tag是按字母排序的，和创建时间没关系。如果只是想查看某些tag的话，可以加限定：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">l v1</span><span class="pun">.*</span></code></li></ol></pre>
+        
+        <p>这样就只会列出1.几的版本。
+        </p><h3><a name="toc-8"></a>6.2创建tag</h3>
+        创建轻量级tag：<p></p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag v1</span><span class="pun">.</span><span class="lit">0</span></code></li></ol></pre>
+        
+        <p>这样创建的tag没有附带其他信息，与之相应的是带信息的tag：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">a v1</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">-</span><span class="pln">m </span><span class="str">'first version'</span></code></li></ol></pre>
+        
+        <p>-m后面带的就是注释信息，这样在日后查看的时候会很有用，这种是普通tag，还有一种有签名的tag：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">s v1</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">-</span><span class="pln">m </span><span class="str">'first version'</span></code></li></ol></pre>
+        
+        <p>前提是你有GPG私钥，把上面的a换成s就行了。除了可以为当前的进度添加tag，我们还可以为以前的commit添加tag：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="com">#首先查看以前的commit</span></code></li><li class="L1"><code><span class="pln">git log </span><span class="pun">--</span><span class="pln">oneline </span></code></li><li class="L2"><code><span class="com">#假如有这样一个commit：8a5cbc2 updated readme</span></code></li><li class="L3"><code><span class="com">#这样为他添加tag</span></code></li><li class="L4"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">a v1</span><span class="pun">.</span><span class="lit">1</span><span class="pln"> </span><span class="lit">8a5cbc2</span></code></li></ol></pre>
+        
+        <h3><a name="toc-9"></a>6.3删除tag</h3>
+        
+        <p>很简单，知道tag名称后：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">d v1</span><span class="pun">.</span><span class="lit">0</span></code></li></ol></pre>
+        
+        <h3><a name="toc-10"></a>6.4验证tag</h3>
+        
+        <p>如果你有GPG私钥的话就可以验证tag：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">v v1</span><span class="pun">.</span><span class="lit">0</span></code></li></ol></pre>
+        
+        <h3><a name="toc-11"></a>6.5共享tag</h3>
+        
+        <p>我们在执行git push的时候，tag是不会上传到服务器的，比如现在的github，创建tag后git push，在github网页上是看不到tag的，为了共享这些tag，你必须这样：</p>
+        <pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git push origin </span><span class="pun">--</span><span class="pln">tags</span></code></li></ol></pre>
+        </div>
 
-<div class="entry-content">
-<div id="toc"><p id="toctitle">目录</p><ul id="ul_1"><li><a href="#toc-1">1.注册账户以及创建仓库</a></li><li><a href="#toc-2">2.安装客户端msysgit</a></li><li><a href="#toc-3">3.配置Git</a></li><li><a href="#toc-4">4.提交、上传</a></li><li><a href="#toc-5">5.gitignore文件</a></li><li><a href="#toc-6">6.tag</a></li><li><a href="#toc-7">6.1查看tag</a></li><li><a href="#toc-8">6.2创建tag</a></li><li><a href="#toc-9">6.3删除tag</a></li><li><a href="#toc-10">6.4验证tag</a></li><li><a href="#toc-11">6.5共享tag</a></li></ul></div><p>github是一个基于git的代码托管平台，付费用户可以建私人仓库，我们一般的免费用户只能使用公共仓库，也就是代码要公开。对于一般人来说公共仓库就已经足够了，而且我们也没多少代码来管理，O(∩_∩)O~。下面是我总结的一些简单使用方法，供初学者参考。
-</p><h2><a name="toc-1"></a>1.注册账户以及创建仓库</h2>
-要想使用github第一步当然是注册github账号了。之后就可以创建仓库了（免费用户只能建公共仓库），Create a New Repository，填好名称后Create，之后会出现一些仓库的配置信息，这也是一个git的简单教程。
-<h2><a name="toc-2"></a>2.安装客户端msysgit</h2>
-github是服务端，要想在自己电脑上使用git我们还需要一个git客户端，我这里选用msysgit，这个只是提供了git的核心功能，而且是基于命令行的。如果想要图形界面的话只要在msysgit的基础上安装TortoiseGit即可。<p></p>
-<p>装完msysgit后右键鼠标会多出一些选项来，在本地仓库里右键选择Git Init Here，会多出来一个.git文件夹，这就表示本地git创建成功。右键Git Bash进入git命令行，为了把本地的仓库传到github，还需要配置ssh key。
-</p><h2><a name="toc-3"></a>3.配置Git</h2>
-首先在本地创建ssh key；<p></p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ ssh</span><span class="pun">-</span><span class="pln">keygen </span><span class="pun">-</span><span class="pln">t rsa </span><span class="pun">-</span><span class="pln">C </span><span class="str">"your_email@youremail.com"</span></code></li></ol></pre>
-
-<p>后面的your_email@youremail.com改为你的邮箱，之后会要求确认路径和输入密码，我们这使用默认的一路回车就行。成功的话会在~/下生成.ssh文件夹，进去，打开id_rsa.pub，复制里面的key。</p>
-<p>回到github，进入Account Settings，左边选择SSH Keys，Add SSH Key,title随便填，粘贴key。为了验证是否成功，在git bash下输入：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ ssh </span><span class="pun">-</span><span class="pln">T git@github</span><span class="pun">.</span><span class="pln">com</span></code></li></ol></pre>
-
-<p>如果是第一次的会提示是否continue，输入yes就会看到：You've successfully authenticated, but GitHub does not provide shell access 。这就表示已成功连上github。</p>
-<p>接下来我们要做的就是把本地仓库传到github上去，在此之前还需要设置username和email，因为github每次commit都会记录他们。</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git config </span><span class="pun">--</span><span class="kwd">global</span><span class="pln"> user</span><span class="pun">.</span><span class="pln">name </span><span class="str">"your name"</span></code></li><li class="L1"><code><span class="pln">$ git config </span><span class="pun">--</span><span class="kwd">global</span><span class="pln"> user</span><span class="pun">.</span><span class="pln">email </span><span class="str">"your_email@youremail.com"</span></code></li></ol></pre>
-
-<p>进入要上传的仓库，右键git bash，添加远程地址：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git remote add origin git@github</span><span class="pun">.</span><span class="pln">com</span><span class="pun">:</span><span class="pln">yourName</span><span class="pun">/</span><span class="pln">yourRepo</span><span class="pun">.</span><span class="pln">git</span></code></li></ol></pre>
-
-<p>后面的yourName和yourRepo表示你再github的用户名和刚才新建的仓库，加完之后进入.git，打开config，这里会多出一个remote “origin”内容，这就是刚才添加的远程地址，也可以直接修改config来配置远程地址。
-</p><h2><a name="toc-4"></a>4.提交、上传</h2>
-接下来在本地仓库里添加一些文件，比如README，<p></p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git add README</span></code></li><li class="L1"><code><span class="pln">$ git commit </span><span class="pun">-</span><span class="pln">m </span><span class="str">"first commit"</span></code></li></ol></pre>
-
-<p>上传到github：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">$ git push origin master</span></code></li></ol></pre>
-
-<p>git push命令会将本地仓库推送到远程服务器。<br>
-git pull命令则相反。</p>
-<p>修改完代码后，使用git status可以查看文件的差别，使用git add 添加要commit的文件，也可以用git add -i来智能添加文件。之后git commit提交本次修改，git push上传到github。
-</p><h2><a name="toc-5"></a>5.gitignore文件</h2>
-.gitignore顾名思义就是告诉git需要忽略的文件，这是一个很重要并且很实用的文件。一般我们写完代码后会执行编译、调试等操作，这期间会产生很多中间文件和可执行文件，这些都不是代码文件，是不需要git来管理的。我们在git status的时候会看到很多这样的文件，如果用git add -A来添加的话会把他们都加进去，而手动一个个添加的话也太麻烦了。这时我们就需要.gitignore了。比如一般c#的项目我的.gitignore是这样写的：<p></p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">bin</span></code></li><li class="L1"><code><span class="pun">*.</span><span class="pln">suo</span></code></li><li class="L2"><code><span class="pln">obj</span></code></li></ol></pre>
-
-<p>bin和obj是编译目录，里面都不是源代码，忽略；suo文件是vs2010的配置文件，不需要。这样你在git status的时候就只会看到源代码文件了，就可以放心的git add -A了。
-</p><h2><a name="toc-6"></a>6.tag</h2>
-我们可以创建一个tag来指向软件开发中的一个关键时期，比如版本号更新的时候可以建一个“v2.0”、“v3.1”之类的标签，这样在以后回顾的时候会比较方便。tag的使用很简单，主要操作有：查看tag、创建tag、验证tag以及共享tag。
-<h3><a name="toc-7"></a>6.1查看tag</h3>
-列出所有tag：<p></p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag</span></code></li></ol></pre>
-
-<p>这样列出的tag是按字母排序的，和创建时间没关系。如果只是想查看某些tag的话，可以加限定：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">l v1</span><span class="pun">.*</span></code></li></ol></pre>
-
-<p>这样就只会列出1.几的版本。
-</p><h3><a name="toc-8"></a>6.2创建tag</h3>
-创建轻量级tag：<p></p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag v1</span><span class="pun">.</span><span class="lit">0</span></code></li></ol></pre>
-
-<p>这样创建的tag没有附带其他信息，与之相应的是带信息的tag：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">a v1</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">-</span><span class="pln">m </span><span class="str">'first version'</span></code></li></ol></pre>
-
-<p>-m后面带的就是注释信息，这样在日后查看的时候会很有用，这种是普通tag，还有一种有签名的tag：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">s v1</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">-</span><span class="pln">m </span><span class="str">'first version'</span></code></li></ol></pre>
-
-<p>前提是你有GPG私钥，把上面的a换成s就行了。除了可以为当前的进度添加tag，我们还可以为以前的commit添加tag：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="com">#首先查看以前的commit</span></code></li><li class="L1"><code><span class="pln">git log </span><span class="pun">--</span><span class="pln">oneline </span></code></li><li class="L2"><code><span class="com">#假如有这样一个commit：8a5cbc2 updated readme</span></code></li><li class="L3"><code><span class="com">#这样为他添加tag</span></code></li><li class="L4"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">a v1</span><span class="pun">.</span><span class="lit">1</span><span class="pln"> </span><span class="lit">8a5cbc2</span></code></li></ol></pre>
-
-<h3><a name="toc-9"></a>6.3删除tag</h3>
-
-<p>很简单，知道tag名称后：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">d v1</span><span class="pun">.</span><span class="lit">0</span></code></li></ol></pre>
-
-<h3><a name="toc-10"></a>6.4验证tag</h3>
-
-<p>如果你有GPG私钥的话就可以验证tag：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git tag </span><span class="pun">-</span><span class="pln">v v1</span><span class="pun">.</span><span class="lit">0</span></code></li></ol></pre>
-
-<h3><a name="toc-11"></a>6.5共享tag</h3>
-
-<p>我们在执行git push的时候，tag是不会上传到服务器的，比如现在的github，创建tag后git push，在github网页上是看不到tag的，为了共享这些tag，你必须这样：</p>
-<pre class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><code><span class="pln">git push origin </span><span class="pun">--</span><span class="pln">tags</span></code></li></ol></pre>
-</div>
-
-<h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
       </section>
     </div>
 
